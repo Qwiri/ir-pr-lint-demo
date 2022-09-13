@@ -1,3 +1,6 @@
+on:
+  pull_request:
+    
 jobs:
   changed-files:
     runs-on: ubuntu-latest
