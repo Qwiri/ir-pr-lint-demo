@@ -265,4 +265,7 @@ if __name__ == "__main__":
         print()
     
     print(f"[linter] found a total of {total_count} warnings/errors")
+
+    if total_count != 0:
+        sys.exit('[linter] found warnings/errors')
     exit(0 if total_count == 0 else 1)

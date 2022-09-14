@@ -18,4 +18,12 @@ jobs:
           python-version: '3.10' 
 
       - name: Run Linter
-        run: python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
+        uses: mathiasvr/command-output@v1.1.0
+        id: run
+        with:
+          run: |
+            python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
+      
+      - name: Send PR comment
+        if: ${{ steps.run.outputs.stderr }}
+        run: exit 1
