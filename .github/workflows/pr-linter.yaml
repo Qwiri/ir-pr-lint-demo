@@ -30,7 +30,7 @@ jobs:
         with:
           message: |
             ```
-            ${{ steps.run.outputs.stderr }}
+            ${{ steps.run.outputs.stdout }}
             ```
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
