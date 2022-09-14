@@ -5,8 +5,8 @@ Version: 1
 #
 name: On
 type: parsed
-protocol: NEC
 address: 01 00 00 00
+protocol: NEC
 command: 40 00 00 00
 # 
 name: Kd
