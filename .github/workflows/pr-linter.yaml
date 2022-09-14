@@ -34,6 +34,7 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           comment-body: |
+            [auto-generated] found some warnings/errors 🐛
             ```
             ${{ steps.run.outputs.stdout }}
             ```
@@ -43,7 +44,7 @@ jobs:
         if: ${{ ! steps.run.outputs.stderr }}
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          comment-body: "LGTM! 😊"
+          review-message: "[auto-generated] LGTM! 😊"
 
       - name: Fail Pipeline
         if: ${{ steps.run.outputs.stderr }}
