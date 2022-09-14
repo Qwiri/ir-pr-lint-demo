@@ -1,1 +1,34 @@
-hello from file a
+Filetype: IR signals file
+Version: 1
+# 
+# Android TV MXQ X96 H96 MAX / V88 / TX6 / T95X / T95M Plus / TX3
+#
+name: On
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 40 00 00 00
+# 
+name: Kd
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 44 00 00 00
+# 
+name: Setup
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 43 00 00 00
+# 
+name: App
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 0F 00 00 00
+# 
+name: Vol_min
+type: parsed
+protocol: NEC
+address: 01 00 00 00
+command: 10 00 00 00
