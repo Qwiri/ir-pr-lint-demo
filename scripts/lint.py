@@ -104,7 +104,7 @@ class KeyValueValidityCheck(Check):
             return [0, len(key), "key unknown"]
         return []
         
-    def force_exit(self) -> int:
+    def exit_rule(self) -> int:
         return EXIT_CURRENT_LINE
 
 class SignalKeyOrderCheck(Check):
