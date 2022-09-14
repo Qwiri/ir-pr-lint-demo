@@ -24,6 +24,16 @@ jobs:
         with:
           run: python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
       
-      - name: Send PR comment
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        if: ${{ steps.run.outputs.stderr }}
+        with:
+          message: |
+            ```
+            ${{ steps.run.outputs.stderr }}
+            ```
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail Pipeline
         if: ${{ steps.run.outputs.stderr }}
         run: exit 1
