@@ -27,16 +27,23 @@ jobs:
         continue-on-error: true
         with:
           run: python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
-      
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
+
+      - uses: ntsd/auto-request-changes-action@v2
+        name: "❌ Request Changes"
         if: ${{ steps.run.outputs.stderr }}
         with:
-          message: |
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          comment-body: |
             ```
             ${{ steps.run.outputs.stdout }}
             ```
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+      - uses: hmarr/auto-approve-action@v2
+        name: "✅ Approve Changes"
+        if: ${{ ! steps.run.outputs.stderr }}
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          comment-body: "LGTM! 😊"
 
       - name: Fail Pipeline
         if: ${{ steps.run.outputs.stderr }}
