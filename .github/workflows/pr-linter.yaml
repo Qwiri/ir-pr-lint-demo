@@ -20,9 +20,9 @@ jobs:
       - name: Run Linter
         uses: mathiasvr/command-output@v1.1.0
         id: run
+        continue-on-error: true
         with:
-          run: |
-            python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
+          run: python scripts/lint.py ${{ steps.changed-files.outputs.all_changed_files }}
       
       - name: Send PR comment
         if: ${{ steps.run.outputs.stderr }}
