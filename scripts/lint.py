@@ -26,23 +26,17 @@ class Mark:
         if self.end == -1:
             self.end = len(line)
 
-def create_mark_underline(length: int, marks: List[Mark]) -> str:
-    """
-    TODO: Fix that.
-    IndexError: list assignment index out of range
-    """
+def create_mark_underline_array(length: int, marks: List[Mark], symbol='^') -> List[str]:
     res = [' '] * length
     for m in marks:
-        if (m.end - m.start) == 0:
-            if len(res) == 0:
-                res.append('^')
-            else:
-                res[m.end] = '^'
-        else:
-            for i in range(m.end - m.start):
-                print("setting", m.end - i - 1, 'to ^')
-                res[m.end - i - 1] = '^'
-    return ''.join(res)
+        if len(res) <= m.end:
+            res.extend([' '] * (m.end - len(res)))
+        for i in range(m.end - m.start):
+            res[m.end - i - 1] = symbol
+    return res
+
+def create_mark_underline(length: int, marks: List[Mark]) -> str:
+    return ''.join(create_mark_underline_array(length, marks))
 
 class Result:
     def __init__(self, marks: List[Mark], error: str, suggestion: str) -> None:
@@ -55,23 +49,19 @@ class Result:
             mark.fix(line)
 
 def result_simple_output():
-    header_output = []
-    def callback(file_path: str, lnr: int, line: str, result: Result):
-        # print header
-        if not file_path in header_output:
-            print()
-            print("# File:", file_path)
-            header_output.append(file_path)
-        
+    def callback(_: str, lnr: int, line: str, result: Result):
         # print line number
         print("Error in line", lnr)
-        print(line)
-        print(create_mark_underline(len(line), result.marks))
-        print(result.error)
+        print(f"'{line}'")
+
+        mark = create_mark_underline_array(len(line), result.marks, symbol='↑')
+        print("", ''.join(mark))
+        print((' '*(mark.index("↑") + 1)) + "[error]:", result.error)
 
         # print suggestion
         if result.suggestion is not None:
-            print("suggested:", result.suggestion)
+            print(f"[suggested] '{result.suggestion}'")
+        print("---")
     return callback
 
 def result_github_output():
@@ -151,6 +141,9 @@ class WhiteSpaceCommentCheck(Check):
         if line.strip().startswith("#") and not line.startswith("#"):
             return single_mark_result_to(line.index("#"), "white space before comment not allowed", suggestion=line.strip())
         return None
+    
+    def exit_rule(self) -> int:
+        return EXIT_CURRENT_LINE
 
 class WhiteSpaceCheck(Check):
     """
@@ -395,6 +388,11 @@ def check_file(file_path: str, fd: TextIOWrapper, on_found = None) -> bool:
         
         context = Context()
         for check in [z for z in checks if z.is_active()]:
+            # check if check is disabled because a previous check failed
+            if type(check.ignore_if_failed) is list and type(check) in check.ignore_if_failed:
+                continue
+
+            # execute check
             resp: Result = check.check(context, lnr, line)
 
             # if check passed, do nothing
@@ -442,7 +440,7 @@ if __name__ == "__main__":
         with open(file, "r", encoding='UTF-8') as fd:
 
             # proxy callback to count warnings
-            def callback(file_path: str, lnr: int, line: str, result: Result):
+            def proxy_callback(file_path: str, lnr: int, line: str, result: Result):
                 global count, total_count
                 count += 1
                 total_count += 1
@@ -450,14 +448,14 @@ if __name__ == "__main__":
                 # pass callback to second-level callback
                 RESULT_CALLBACK(file_path, lnr, line, result)
 
-            res = check_file(file, fd, callback)
+            res = check_file(file, fd, proxy_callback)
 
         print(f"[lint] found {count} warnings/errors in file.")
         print('*'*len(header))
         print()
     
-    print(f"[linter] found a total of {total_count} warnings/errors")
+    print(f"[lint] found a total of {total_count} warnings/errors")
 
     if total_count != 0:
-        sys.exit('[linter] found warnings/errors')
+        sys.exit('[lint] found warnings/errors')
     exit(0 if total_count == 0 else 1)
