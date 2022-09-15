@@ -8,7 +8,7 @@ type: parsed
 protocol: NEC
 address: 01 00 00 00
 command: 40 00 00 00
- # test!
+#
 name: Kd
 type: parsed
 protocol: NEC
@@ -19,7 +19,7 @@ name: Setup
 type: parsed
 protocol: NEC
 address: 01 00 00 00
-comand: 43 00 00 00
+command: 43 00 00 00
 # 
 name: App
 type: parsed
@@ -122,7 +122,7 @@ type: parsed
 protocol: NEC
 address: 01 00 00 00
 command: 41 00 00 00
-# stop!
+#
 name: Mouse
 type: parsed
 protocol: NEC
