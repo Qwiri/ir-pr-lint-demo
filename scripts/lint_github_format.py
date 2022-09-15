@@ -27,7 +27,7 @@ def callback():
 
         print("```")
         if result.suggestion is not None:
-            print(f"> **Note***(**suggested**): `{result.suggestion}`")
+            print(f"> **Note**(**suggested**): `{result.suggestion}`")
     return inner
 
 if __name__ == "__main__":

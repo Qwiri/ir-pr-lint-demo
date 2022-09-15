@@ -34,9 +34,9 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           comment-body: |
-            ${{ steps.run.outputs.stdout }}
-
             > **Note**: This comment was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
+
+            ${{ steps.run.outputs.stdout }}
             
       - uses: hmarr/auto-approve-action@v2
         name: "✅ Approve Changes"
@@ -44,9 +44,9 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           review-message: |
-            LGTM! 😊
-
             > **Note**: This comment was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
+            
+            LGTM! 😊
 
       - name: Fail Pipeline
         if: ${{ steps.run.outputs.stderr }}
