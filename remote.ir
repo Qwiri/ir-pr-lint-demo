@@ -16,8 +16,8 @@ address: 01 00 00 00
 command: 44 00 00 00
 # 
 name: Setup
+protocol:NEC
 type: parsed
-protocol: NEC
 address: 01 00 00 00
 command: 43 00 00 00
 # 
