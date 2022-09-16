@@ -3,12 +3,12 @@ Version: 1
 # 
 # Android TV MXQ X96 H96 MAX / V88 / TX6 / T95X / T95M Plus / TX3
 #
-name: On
+name: ON
 type: parsed
 protocol: NEC
 address: 01 00 00 00
 command: 40 00 00 00
- # test!
+# test!
 name: Kd
 type: parsed
 protocol: NEC
@@ -16,7 +16,7 @@ address: 01 00 00 00
 command: 44 00 00 00
 # 
 name: Setup
-type: parsed
+type:parsed
 protocol: NEC
 address: 01 00 00 00
 comand: 43 00 00 00
