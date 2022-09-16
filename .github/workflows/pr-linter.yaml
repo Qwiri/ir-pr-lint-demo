@@ -15,6 +15,9 @@ jobs:
         with:
           repository: 'darmiel/fff-ir-lint'
           path: fff-ir-lint
+          
+      - run: ls -larth
+      - run: ls -larth ..
       
       - name: Get changed files
         id: changed-files
