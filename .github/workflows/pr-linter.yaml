@@ -37,7 +37,7 @@ jobs:
 
       - uses: ntsd/auto-request-changes-action@v2
         name: "❌ Request Changes"
-        if: ${{ steps.run.outputs.stderr }}
+        if: ${{ steps.run.conclusion.outcome != 'skipped' }} && ${{ steps.run.outputs.stderr }}
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           comment-body: |
@@ -46,7 +46,7 @@ jobs:
       # optional: auto approve PRs with valid .ir files
       - uses: hmarr/auto-approve-action@v2
         name: "✅ Approve Changes"
-        if: ${{ ! steps.run.outputs.stderr }}
+        if: ${{ steps.run.conclusion.outcome != 'skipped' }} && ${{ ! steps.run.outputs.stderr }}
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           review-message: |
@@ -55,5 +55,5 @@ jobs:
             LGTM! 😊
 
       - name: Fail Pipeline
-        if: ${{ steps.run.outputs.stderr }}
+        if: ${{ steps.run.conclusion.outcome != 'skipped' }} && ${{ steps.run.outputs.stderr }}
         run: exit 1
