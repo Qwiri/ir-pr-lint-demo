@@ -34,7 +34,7 @@ jobs:
         id: run
         continue-on-error: true
         with:
-          run: python fff-ir-lint/main.py github ${{ steps.changed-files.outputs.all_changed_files }}
+          run: python fff-ir-lint/main.py github2 ${{ steps.changed-files.outputs.all_changed_files }}
 
       - uses: ntsd/auto-request-changes-action@v2
         name: "❌ Request Changes"
@@ -42,8 +42,6 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           comment-body: |
-            > **Note**: This comment was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
-
             ${{ steps.run.outputs.stdout }}
             
       - uses: hmarr/auto-approve-action@v2
@@ -52,7 +50,7 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           review-message: |
-            > **Note**: This comment was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
+            > **Note**: This approval was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
             
             LGTM! 😊
 
