@@ -1,10 +1,11 @@
-name: "🧐 [Lint] Checking .ir files for warnings"
+name: "🧐 [Lint] Checking .ir files"
 
 on:
   pull_request:
     
 jobs:
-  hello-world:
+  lint:
+    name: "🐛 Looking for errors/warnings"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,9 +16,6 @@ jobs:
         with:
           repository: 'darmiel/fff-ir-lint'
           path: fff-ir-lint
-          
-      - run: ls -larth
-      - run: ls -larth ..
       
       - name: Get changed files
         id: changed-files
@@ -29,7 +27,8 @@ jobs:
         with:
           python-version: '3.10' 
 
-      - name: Run Linter
+      - name: Run Linter if .ir files were changed
+        if: ${{ steps.changed-files.outputs.all_changed_files }}
         uses: mathiasvr/command-output@v1.1.0
         id: run
         continue-on-error: true
@@ -38,22 +37,23 @@ jobs:
 
       - uses: ntsd/auto-request-changes-action@v2
         name: "❌ Request Changes"
-        if: ${{ steps.run.outputs.stderr }}
+        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ steps.run.outputs.stderr }}
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           comment-body: |
             ${{ steps.run.outputs.stdout }}
             
+      # optional: auto approve PRs with valid .ir files
       - uses: hmarr/auto-approve-action@v2
         name: "✅ Approve Changes"
-        if: ${{ ! steps.run.outputs.stderr }}
+        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ ! steps.run.outputs.stderr }}
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           review-message: |
-            > **Note**: This approval was [auto-generated](https://github.com/Qwiri/ir-pr-lint-demo/blob/main/.github/workflows/pr-linter.yaml)
+            > **Note**: This approval was *auto-generated*
             
             LGTM! 😊
 
       - name: Fail Pipeline
-        if: ${{ steps.run.outputs.stderr }}
+        if: ${{ steps.changed-files.outputs.all_changed_files }} && ${{ steps.run.outputs.stderr }}
         run: exit 1
