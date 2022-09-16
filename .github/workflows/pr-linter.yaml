@@ -6,10 +6,15 @@ on:
 jobs:
   hello-world:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - uses: actions/checkout@v3
+        with:
+          repository: 'darmiel/fff-ir-lint'
+          path: fff-ir-lint
       
       - name: Get changed files
         id: changed-files
@@ -26,7 +31,7 @@ jobs:
         id: run
         continue-on-error: true
         with:
-          run: python scripts/lint_github_format.py ${{ steps.changed-files.outputs.all_changed_files }}
+          run: python fff-ir-lint/main.py github ${{ steps.changed-files.outputs.all_changed_files }}
 
       - uses: ntsd/auto-request-changes-action@v2
         name: "❌ Request Changes"
