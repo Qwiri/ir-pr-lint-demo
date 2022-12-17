@@ -25,7 +25,7 @@ jobs:
           files: "**/*.ir"
         
       - name: Run Linter
-        uses: darmiel/fff-ir-lint-action@5b5ea7a95a169ae66af82f88424741feb3fc3a1a
+        uses: darmiel/fff-ir-lint-action@95449897fc6bc069a99fe333f80e8540b3bb2b6d
         with:
           files: ${{ steps.changed-files.outputs.all_changed_files }}
           lint-path: fff-ir-lint
