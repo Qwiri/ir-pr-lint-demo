@@ -1,0 +1,10 @@
+Filetype: IR signals file
+Version: 1
+# 
+# Android TV MXQ X96 H96 MAX / V88 / TX6 / T95X / T95M Plus / TX3
+#
+name: On
+type: parsed
+protocol: NECxb
+address: 01 00 00 00
+command: 40 00 00 00
