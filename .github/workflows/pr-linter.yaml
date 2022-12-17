@@ -25,13 +25,12 @@ jobs:
           files: "**/*.ir"
         
       - name: Run Linter
-        uses: darmiel/fff-ir-lint-action@0317036e6eba5bfcaa4ae6dd216a355c952f9fe3
+        uses: darmiel/fff-ir-lint-action@4b3abec55a561f5d532312d6434c99060d231dc9
         with:
           files: ${{ steps.changed-files.outputs.all_changed_files }}
           lint-path: fff-ir-lint
           token: ${{ secrets.GITHUB_TOKEN }}
           auto-approve: true
-          auto-approve-message: 'No errors found.'
+          auto-approve-message: 'No errors found. Good job! 🤗'
           auto-request-changes: true
-          auto-request-changes-message: 'Some errors found.'
         
