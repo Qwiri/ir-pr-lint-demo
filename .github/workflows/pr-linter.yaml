@@ -24,13 +24,36 @@ jobs:
         with:
           files: "**/*.ir"
         
-      - name: Run Linter
-        uses: darmiel/fff-ir-lint-action@95449897fc6bc069a99fe333f80e8540b3bb2b6d
+      - uses: actions/setup-python@v4
         with:
-          files: ${{ steps.changed-files.outputs.all_changed_files }}
-          lint-path: fff-ir-lint
-          token: ${{ secrets.GITHUB_TOKEN }}
-          auto-approve: true
-          auto-approve-message: 'No errors found. Good job! 🤗'
-          auto-request-changes: true
-        
+          python-version: '3.10' 
+
+      - name: Run Linter if .ir files were changed
+        uses: mathiasvr/command-output@v1.1.0
+        id: run
+        continue-on-error: true
+        with:
+          run: "python fff-ir-lint/main.py github2 '${{ steps.changed-files.outputs.all_changed_files }}'"
+
+      - uses: ntsd/auto-request-changes-action@v2
+        name: "❌ Request Changes"
+        if: ${{ steps.run.outputs.stderr }}
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          comment-body: |
+            ${{ steps.run.outputs.stdout }}
+            
+      # optional: auto approve PRs with valid .ir files
+      - uses: hmarr/auto-approve-action@v2
+        name: "✅ Approve Changes"
+        if: ${{ ! steps.run.outputs.stderr }}
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          review-message: |
+            > **Note**: This approval was *auto-generated*
+            
+            LGTM! 😊
+
+      - name: Fail Pipeline
+        if: ${{ steps.run.outputs.stderr }}
+        run: exit 1
