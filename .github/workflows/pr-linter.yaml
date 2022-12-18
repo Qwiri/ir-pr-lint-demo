@@ -23,7 +23,12 @@ jobs:
         uses: tj-actions/changed-files@v29.0.7
         with:
           files: "**/*.ir"
-          json: "true"
+          
+      - name: Save changed file names to file
+        run: echo '${{ steps.changed-files.outputs.all_changed_files }}' > changed_file_list.txt
+        
+      - name: Show changed file names
+        run: cat changed_file_list.txt
         
       - uses: actions/setup-python@v4
         with:
