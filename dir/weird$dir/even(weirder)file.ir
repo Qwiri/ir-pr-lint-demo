@@ -13,4 +13,4 @@ name: Kd
 type: parsed
 protocol: NEC
 address: 01 00 00 00
-comment: 44 00 00 00
+command: 44 00 00 00
