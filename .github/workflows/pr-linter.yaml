@@ -23,6 +23,7 @@ jobs:
         uses: tj-actions/changed-files@v29.0.7
         with:
           files: "**/*.ir"
+          json: "true"
         
       - uses: actions/setup-python@v4
         with:
