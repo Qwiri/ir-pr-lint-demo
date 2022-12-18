@@ -23,7 +23,7 @@ jobs:
         uses: tj-actions/changed-files@v29.0.7
         with:
           files: "**/*.ir"
-          files_separator: "<><><><><>"
+          separator: "\n"
           
       - name: Save changed file names to file
         run: echo '${{ steps.changed-files.outputs.all_changed_files }}' > changed_file_list.txt
