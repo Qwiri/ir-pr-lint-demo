@@ -32,7 +32,9 @@ jobs:
         uses: mathiasvr/command-output@v1.1.0
         id: run
         with:
-          run: export PYTHONPATH="$PWD/flipper-scripts" python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt
+          run: |
+            export PYTHONPATH="$PWD/flipper-scripts" 
+            python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt
 
       - name: Display Report
         uses: thollander/actions-comment-pull-request@v2
