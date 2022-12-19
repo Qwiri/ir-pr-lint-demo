@@ -20,17 +20,28 @@ jobs:
       
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v35.1.0
+        uses: tj-actions/changed-files@v29.0.7
         with:
           files: "**/*.ir"
           separator: "\n"
-          write_output_files: "true"
           
       - name: Save changed file names to file
-        run: echo '${{ steps.changed-files.outputs.all_changed_files }}' > changed_file_list.txt
+        run: echo '${{ steps.changed-files.outputs.added_files }}' > added_file_list.txt
         
-      - name: Show changed file names
-        run: |
-          cat changed_file_list.txt
-          ls -la .github/outputs
-          cat .github/outputs/*
+      - name: Generate Report
+        uses: mathiasvr/command-output@v1.1.0
+        id: run
+        with:
+          run: export PYTHONPATH="$PWD/flipper-scripts" python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt
+
+      - name: Display Report
+        uses: thollander/actions-comment-pull-request@v2
+        if: ${{ steps.run.outputs.stdout }}
+        with:
+          message: |
+            **Duplicate Report**
+            ${{ steps.run.outputs.stdout }}
+
+      - name: Fail Pipeline
+        if: ${{ steps.run.outputs.stderr }}
+        run: exit 1
