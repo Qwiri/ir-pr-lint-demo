@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: 'darmiel/flipper-scripts'
-          path: darmiel/flipper-scripts
+          path: flipper-scripts
       
       - name: Get changed files
         id: changed-files
