@@ -29,21 +29,17 @@ jobs:
         run: echo '${{ steps.changed-files.outputs.added_files }}' > added_file_list.txt
         
       - name: Generate Report
-        uses: mathiasvr/command-output@v1.1.0
         id: run
-        with:
-          run: |
-            export PYTHONPATH="$PWD/flipper-scripts" 
-            python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt
+        run: |
+          export PYTHONPATH="$PWD/flipper-scripts" 
+          python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt | tee duplicate_report.txt
+          echo "OUTPUT=$(cat duplicate_report.txt)" >> $GITHUB_ENV
 
       - name: Display Report
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.run.outputs.stdout }}
+        if: ${{ steps.run.outputs.GITHUB_ENV }}
         with:
           message: |
             **Duplicate Report**
-            ${{ steps.run.outputs.stdout }}
-
-      - name: Fail Pipeline
-        if: ${{ steps.run.outputs.stderr }}
-        run: exit 1
+            ${{ steps.run.outputs.GITHUB_ENV }}
+            
