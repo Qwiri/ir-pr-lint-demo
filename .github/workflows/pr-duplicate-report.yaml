@@ -35,14 +35,15 @@ jobs:
       - name: Generate Report
         id: run
         run: | 
-          export PYTHONPATH="$PWD/flipper-scripts" 
-          python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt | tee duplicate_report.txt
-          echo "OUTPUT=$(cat duplicate_report.txt)" >> $GITHUB_ENV
+          export PYTHONPATH="$PWD/flipper-scripts"
+          echo "OUTPUT<<EOF" >> $GITHUB_OUTPUT
+          python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Display Report
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.run.outputs.GITHUB_ENV }}
+        if: ${{ steps.run.outputs.OUTPUT }}
         with:
           message: |
             **Duplicate Report**
-            ${{ steps.run.outputs.GITHUB_ENV }}
+            ${{ steps.run.outputs.OUTPUT }}
