@@ -36,11 +36,8 @@ jobs:
         id: run
         run: | 
           export PYTHONPATH="$PWD/flipper-scripts" 
-          python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt
-        
-        # | tee duplicate_report.txt
-        # 
-        # echo "OUTPUT=$(cat duplicate_report.txt)" >> $GITHUB_ENV
+          python flipper-scripts/infrared/duplicate_finder.py file:added_file_list.txt | tee duplicate_report.txt
+          echo "OUTPUT=$(cat duplicate_report.txt)" >> $GITHUB_ENV
 
       - name: Display Report
         uses: thollander/actions-comment-pull-request@v2
